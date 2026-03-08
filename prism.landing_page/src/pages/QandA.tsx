@@ -432,22 +432,24 @@ https://nhathuoclongchau.com.vn/bai-viet/xuat-huyet-da-day-non-ra-mau-co-nguy-hi
               Nhập câu hỏi tại đây, tụi mình sẽ phản hồi qua email hoặc cập nhật lên danh sách nhé!
             </p>
             <form className="qa-submit-form" onSubmit={handleSubmitQuestion}>
-              <input
-                className="qa-submit-input"
-                placeholder="Email của bạn"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isSubmitting}
-              />
-              <input
-                className="qa-submit-input"
-                placeholder="Ví dụ: Đau thượng vị về đêm có nguy hiểm không?"
-                type="text"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                disabled={isSubmitting}
-              />
+              <div className="qa-submit-inputs-wrapper">
+                <input
+                  className="qa-submit-input"
+                  placeholder="Email của bạn"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
+                />
+                <input
+                  className="qa-submit-input"
+                  placeholder="Ví dụ: Đau thượng vị về đêm có nguy hiểm không?"
+                  type="text"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </div>
               <button 
                 className="qa-submit-button" 
                 type="submit"

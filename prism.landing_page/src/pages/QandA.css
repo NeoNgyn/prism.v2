@@ -395,7 +395,15 @@
 @media (min-width: 768px) {
   .qa-submit-form {
     flex-direction: row;
+    align-items: stretch;
   }
+}
+
+.qa-submit-inputs-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
 }
 
 .qa-submit-input {
@@ -418,6 +426,7 @@
   background: linear-gradient(135deg, #FF8A00 0%, #FF5C00 100%);
   color: white;
   font-weight: 700;
+  font-size: 1.125rem;
   padding: 1rem 2rem;
   border-radius: 0.75rem;
   box-shadow: 0 10px 15px -3px rgba(255, 92, 0, 0.3);
@@ -441,7 +450,7 @@
 }
 
 .qa-submit-button .material-symbols-outlined {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 
 .qa-submit-button:disabled {
