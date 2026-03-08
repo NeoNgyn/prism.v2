@@ -285,6 +285,18 @@ https://nhathuoclongchau.com.vn/bai-viet/xuat-huyet-da-day-non-ra-mau-co-nguy-hi
     setSubmitMessage(null);
     
     try {
+      // Get current timestamp
+      const now = new Date();
+      const receiveTime = now.toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+      
       // Send email using EmailJS
       const result = await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -292,7 +304,8 @@ https://nhathuoclongchau.com.vn/bai-viet/xuat-huyet-da-day-non-ra-mau-co-nguy-hi
         {
           from_email: email,
           question: question,
-          to_email: 'support@prism.com', // Email nhận câu hỏi
+          receive_time: receiveTime,
+          reply_to: email,
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
