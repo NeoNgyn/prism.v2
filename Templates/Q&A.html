@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ÊM DẠ MODE - Interactive Q&amp;A Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&amp;family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#E31E24", // Vibrant campaign red
+              "background-light": "#FFFFFF",
+              "background-dark": "#0F172A",
+              "accent-orange": "#FF5C00",
+            },
+            fontFamily: {
+              display: ["Lexend", "sans-serif"],
+              body: ["Montserrat", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              "xl": "1rem",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .backface-hidden {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+      .flip-card-inner {
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+      .flipped .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+      .bg-gradient-primary {
+        background: linear-gradient(135deg, #E31E24 0%, #FF5C00 100%);
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-body transition-colors duration-300">
+<nav class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20 items-center">
+<div class="flex items-center gap-2">
+<div class="bg-primary text-white p-2 rounded-lg font-display font-extrabold text-xl tracking-tighter">
+                        ÊM DẠ MODE
+                    </div>
+</div>
+<div class="hidden md:flex space-x-8 font-semibold">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary" href="#">Trang chủ</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary" href="#">About us</a>
+<a class="text-primary border-b-2 border-primary" href="#">Q&amp;A</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary" href="#">Test</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary" href="#">Liên hệ</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons">dark_mode</span>
+</button>
+<button class="bg-primary hover:bg-red-700 text-white px-5 py-2 rounded-full font-semibold transition-all">Join Now</button>
+</div>
+</div>
+</div>
+</nav>
+<header class="py-16 px-4 text-center">
+<h1 class="font-display text-5xl md:text-7xl font-extrabold text-primary mb-4 uppercase tracking-tight">
+            CÂU HỎI THƯỜNG GẶP
+        </h1>
+<p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            Tìm hiểu thêm về sức khỏe dạ dày qua các câu hỏi phổ biến từ chiến dịch Êm Dạ Mode.
+        </p>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            ĐAU DẠ DÀY HAY TRÀO NGƯỢC KHÁC NHAU THẾ NÀO?
+                        </h3>
+<span class="material-icons text-white text-5xl animate-spin-slow">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Đau dạ dày thường tập trung ở vùng thượng vị, cảm giác âm ỉ hoặc quặn thắt. Trào ngược (GERD) thường đi kèm cảm giác nóng rát lan từ dạ dày lên thực quản, ợ chua và khó nuốt.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">Thư viện Y khoa Quốc gia</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Triệu chứng ợ hơi kéo dài?</li>
+<li>Khi nào cần đi nội soi?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            GERD PHỔ BIẾN TỚI MỨC NÀO Ở VIỆT NAM?
+                        </h3>
+<span class="material-icons text-white text-5xl">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Ước tính khoảng 10-15% dân số Việt Nam gặp các vấn đề về trào ngược dạ dày thực quản do thói quen ăn uống nhanh, nhiều dầu mỡ và stress công việc cao.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">Báo Sức Khỏe &amp; Đời Sống</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Chế độ ăn cho người GERD?</li>
+<li>Stress ảnh hưởng dạ dày sao?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            ĐAU THƯỢNG VỊ, ĐẦY BỤNG CÓ PHẢI "BỆNH DẠ DÀY"?
+                        </h3>
+<span class="material-icons text-white text-5xl">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Đúng, đây là những dấu hiệu điển hình của viêm loét dạ dày hoặc khó tiêu chức năng. Tuy nhiên, cũng có thể do túi mật hoặc tụy, cần thăm khám bác sĩ chuyên khoa.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">Cổng thông tin Vinmec</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Phân biệt đau dạ dày &amp; gan?</li>
+<li>Cách giảm đau nhanh tại nhà?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            KHI NÀO CẦN ĐI KHÁM NGAY, KHÔNG NÊN TỰ CHỊU?
+                        </h3>
+<span class="material-icons text-white text-5xl">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Đi khám ngay nếu: Nôn ra máu hoặc đi ngoài phân đen, sụt cân không rõ nguyên nhân, nuốt nghẹn, hoặc đau bụng dữ dội không thuyên giảm sau khi nghỉ ngơi.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">Nhà thuốc Long Châu</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Xuất huyết dạ dày có nguy hiểm?</li>
+<li>Tầm soát ung thư dạ dày?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            TRÀO NGƯỢC DẠ DÀY NÊN KIÊNG GÌ ĐỂ CẢI THIỆN?
+                        </h3>
+<span class="material-icons text-white text-5xl">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Hạn chế thực phẩm cay nóng, chua, cà phê, rượu bia, chocolate và các loại đồ uống có gas. Không nên nằm ngay sau khi ăn ít nhất 2-3 tiếng.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">BV Đại học Y Dược TP.HCM</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Tư thế nằm ngủ cho người trào ngược?</li>
+<li>Mẹo dân gian chữa dạ dày?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="perspective-1000 group h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+<div class="flip-card-inner relative w-full h-full shadow-2xl rounded-xl border-4 border-black dark:border-slate-700">
+<div class="backface-hidden absolute inset-0 bg-primary flex flex-col items-center justify-center p-8 text-center rounded-lg">
+<h3 class="font-display text-2xl font-black text-white leading-tight mb-8">
+                            STRESS CÓ THỂ LÀM NẶNG VẤN ĐỀ DẠ DÀY KHÔNG?
+                        </h3>
+<span class="material-icons text-white text-5xl">autorenew</span>
+<p class="text-white font-semibold mt-4">Nhấn để xem câu trả lời</p>
+</div>
+<div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rotate-y-180 flex flex-col p-8 rounded-lg overflow-y-auto">
+<h4 class="text-primary font-bold text-lg mb-2">Câu trả lời:</h4>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                            Chắc chắn có. Stress kích thích hệ thần kinh giao cảm làm tăng tiết acid dạ dày và làm chậm quá trình tiêu hóa, dễ dẫn đến viêm loét và hội chứng ruột kích thích.
+                        </p>
+<div class="mt-auto border-t pt-4 border-slate-200 dark:border-slate-700">
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Nguồn tham khảo:</p>
+<a class="text-primary text-xs underline hover:text-accent-orange block mb-3" href="#">Healthline</a>
+<p class="text-xs font-bold text-slate-500 uppercase mb-2">Câu hỏi liên quan:</p>
+<ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-4">
+<li>Kỹ thuật thở giảm đau dạ dày?</li>
+<li>Mối liên hệ não - ruột?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<section class="bg-slate-50 dark:bg-slate-900 py-20">
+<div class="max-w-4xl mx-auto px-4 text-center">
+<h2 class="font-display text-3xl font-bold mb-4 dark:text-white">Bạn không thấy câu hỏi của mình?</h2>
+<p class="text-slate-600 dark:text-slate-400 mb-8">Nhập câu hỏi tại đây, tụi mình sẽ phản hồi qua email hoặc cập nhật lên danh sách nhé!</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+<input class="flex-grow rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 focus:ring-primary focus:border-primary transition-all" placeholder="Ví dụ: Đau thượng vị về đêm có nguy hiểm không?" type="text"/>
+<button class="bg-gradient-primary hover:opacity-90 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" type="button">
+                    Gửi ngay <span class="material-icons">send</span>
+</button>
+</form>
+<p class="mt-4 text-xs text-slate-500 italic">Câu hỏi của bạn sẽ được đội ngũ chuyên gia phản hồi trong 24h.</p>
+</div>
+</section>
+<footer class="bg-white dark:bg-slate-950 pt-20 pb-8 border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div>
+<div class="bg-primary text-white p-2 rounded-lg font-display font-extrabold text-lg inline-block mb-6">ÊM DẠ MODE</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed italic">
+                    "Lắng nghe dạ dày, thấu hiểu cơ thể. Chiến dịch vì cộng đồng khỏe mạnh hơn mỗi ngày."
+                </p>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-slate-900 dark:text-white">Chiến dịch</h4>
+<ul class="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Về chúng tôi</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Đối tác y tế</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tài liệu sức khỏe</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tin tức &amp; sự kiện</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-slate-900 dark:text-white">Liên hệ</h4>
+<ul class="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+<li class="flex items-center gap-2"><span class="material-icons text-xs">email</span> hello@emdamode.vn</li>
+<li class="flex items-center gap-2"><span class="material-icons text-xs">phone</span> 1900 123 456</li>
+<li class="flex items-center gap-2"><span class="material-icons text-xs">location_on</span> TPHCM, Việt Nam</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-slate-900 dark:text-white">Theo dõi chúng mình</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-icons">facebook</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-icons">language</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-icons">play_circle</span>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-100 dark:border-slate-900 pt-8 text-center">
+<div class="flex items-center justify-center gap-2 mb-2 opacity-50 grayscale hover:grayscale-0 transition-all cursor-default">
+<span class="material-icons text-primary">category</span>
+<span class="font-display font-bold tracking-widest text-slate-400">TEAM PRISM</span>
+</div>
+<p class="text-xs text-slate-400">© 2024 Êm Dạ Mode Campaign. Toàn bộ nội dung chỉ mang tính chất tham khảo.</p>
+</div>
+</footer>
+
+</body></html>

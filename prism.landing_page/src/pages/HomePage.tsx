@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import QandA from './QandA';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -26,7 +27,8 @@ const HomePage = () => {
   useEffect(() => {
     // Map pathname to section IDs
     const sectionMap: Record<string, string> = {
-      '/aboutus': 'about'
+      '/aboutus': 'about',
+      '/qa': 'qa'
     };
 
     const sectionId = sectionMap[location.pathname];
@@ -73,10 +75,13 @@ const HomePage = () => {
       if (isScrollingProgrammatically.current) return;
 
       entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.target.id === 'about') {
-          if (location.pathname !== '/aboutus') {
+        if (entry.isIntersecting) {
+          if (entry.target.id === 'about' && location.pathname !== '/aboutus') {
             isNavigatingFromScrollSpy.current = true;
             navigate('/aboutus', { replace: true });
+          } else if (entry.target.id === 'qa' && location.pathname !== '/qa') {
+            isNavigatingFromScrollSpy.current = true;
+            navigate('/qa', { replace: true });
           }
         }
       });
@@ -84,10 +89,15 @@ const HomePage = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Observe about section
+    // Observe sections
     const aboutSection = document.getElementById('about');
+    const qaSection = document.getElementById('qa');
+    
     if (aboutSection) {
       observer.observe(aboutSection);
+    }
+    if (qaSection) {
+      observer.observe(qaSection);
     }
 
     // Handler for scrolling back to top
@@ -336,6 +346,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Q&A Section */}
+      <QandA />
     </main>
       <Footer />
     </>
