@@ -20,9 +20,6 @@ const QuestionCard = ({ question, index, mascotVariant }: QuestionCardProps) => 
   
   return (
     <div className="qa-question-card">
-      <div className="qa-card-header">
-        <div className="qa-card-number">{String(index + 1).padStart(2, '0')}</div>
-      </div>
       <h3 className="qa-card-question">{question}</h3>
       <div className="qa-card-mascot">
         <div 
@@ -38,7 +35,6 @@ const QuestionCard = ({ question, index, mascotVariant }: QuestionCardProps) => 
 
 const QandA = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayRef = useRef<number | null>(null);
 
   const questions = [
@@ -73,31 +69,23 @@ const QandA = () => {
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
     }
-    if (isAutoPlaying) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
-      }, 3500);
-    }
+    autoPlayRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
+    }, 2000);
   };
 
   // Auto-play effect
   useEffect(() => {
-    if (isAutoPlaying) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
-      }, 3500); // Change slide every 3.5 seconds
-    }
+    autoPlayRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
+    }, 2000); // Change slide every 2 seconds
 
     return () => {
       if (autoPlayRef.current) {
         clearInterval(autoPlayRef.current);
       }
     };
-  }, [isAutoPlaying, questions.length]);
-
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying);
-  };
+  }, [questions.length]);
 
   return (
     <section className="qa-section" id="qa">
@@ -154,38 +142,19 @@ const QandA = () => {
           </button>
         </div>
 
-        {/* Controls */}
-        <div className="qa-slider-controls">
-          {/* Auto-play toggle */}
-          <button 
-            className={`qa-autoplay-button ${isAutoPlaying ? 'playing' : 'paused'}`}
-            onClick={toggleAutoPlay}
-            aria-label={isAutoPlaying ? 'Pause auto-play' : 'Start auto-play'}
-          >
-            <span className="material-symbols-outlined">
-              {isAutoPlaying ? 'pause' : 'play_arrow'}
-            </span>
-          </button>
-
-          {/* Dots Indicator */}
-          <div className="qa-slider-dots">
-            {questions.map((_, index) => (
-              <button
-                key={index}
-                className={`qa-slider-dot ${index === currentIndex ? 'active' : ''}`}
-                onClick={() => {
-                  setCurrentIndex(index);
-                  resetAutoPlay();
-                }}
-                aria-label={`Go to question ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          {/* Counter */}
-          <div className="qa-slider-counter">
-            {String(currentIndex + 1).padStart(2, '0')} / {String(questions.length).padStart(2, '0')}
-          </div>
+        {/* Dots Indicator */}
+        <div className="qa-slider-dots">
+          {questions.map((_, index) => (
+            <button
+              key={index}
+              className={`qa-slider-dot ${index === currentIndex ? 'active' : ''}`}
+              onClick={() => {
+                setCurrentIndex(index);
+                resetAutoPlay();
+              }}
+              aria-label={`Go to question ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 
