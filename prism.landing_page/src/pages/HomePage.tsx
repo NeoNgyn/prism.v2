@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import QandA from './QandA';
+import { Toast } from '../components/Toast';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -10,6 +12,19 @@ const HomePage = () => {
   const navigate = useNavigate();
   const isScrollingProgrammatically = useRef(false);
   const isNavigatingFromScrollSpy = useRef(false);
+  
+  // Toast state
+  const [showToast, setShowToast] = useState(false);
+  const [toastTitle, setToastTitle] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  // Toast helper function
+  const displayToast = (title: string, message: string) => {
+    setToastTitle(title);
+    setToastMessage(message);
+    setShowToast(true);
+  };
 
   // Listen for header nav clicks (when clicking same page link)
   useEffect(() => {
@@ -28,7 +43,9 @@ const HomePage = () => {
     // Map pathname to section IDs
     const sectionMap: Record<string, string> = {
       '/aboutus': 'about',
-      '/qa': 'qa'
+      '/qa': 'qa',
+      '/test': 'test',
+      '/contact': 'contact'
     };
 
     const sectionId = sectionMap[location.pathname];
@@ -82,6 +99,12 @@ const HomePage = () => {
           } else if (entry.target.id === 'qa' && location.pathname !== '/qa') {
             isNavigatingFromScrollSpy.current = true;
             navigate('/qa', { replace: true });
+          } else if (entry.target.id === 'test' && location.pathname !== '/test') {
+            isNavigatingFromScrollSpy.current = true;
+            navigate('/test', { replace: true });
+          } else if (entry.target.id === 'contact' && location.pathname !== '/contact') {
+            isNavigatingFromScrollSpy.current = true;
+            navigate('/contact', { replace: true });
           }
         }
       });
@@ -92,12 +115,20 @@ const HomePage = () => {
     // Observe sections
     const aboutSection = document.getElementById('about');
     const qaSection = document.getElementById('qa');
+    const testSection = document.getElementById('test');
+    const contactSection = document.getElementById('contact');
     
     if (aboutSection) {
       observer.observe(aboutSection);
     }
     if (qaSection) {
       observer.observe(qaSection);
+    }
+    if (testSection) {
+      observer.observe(testSection);
+    }
+    if (contactSection) {
+      observer.observe(contactSection);
     }
 
     // Handler for scrolling back to top
@@ -122,6 +153,63 @@ const HomePage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [location.pathname, navigate]);
+
+  // Handle contact form submission with EmailJS
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const form = e.currentTarget;
+    
+    // Kiểm tra cấu hình EmailJS
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      displayToast('Lỗi cấu hình', 'Vui lòng cấu hình EmailJS trong file .env. Xem hướng dẫn trong EMAILJS_SETUP.md');
+      return;
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // Validate form
+    if (!data['full-name'] || !data.email || !data.message) {
+      displayToast('Thiếu thông tin', 'Vui lòng điền đầy đủ họ tên, email và nội dung.');
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      const templateParams = {
+        from_name: data['full-name'],
+        reply_to: data.email,
+        phone: data.phone || 'Không cung cấp',
+        topic: data.subject || 'Khác',
+        message: data.message,
+      };
+
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
+      if (response.status === 200 || response.text === 'OK') {
+        displayToast('Gửi thành công!', 'Email của bạn đã được gửi. Chúng tôi sẽ phản hồi trong 24-48h.');
+        form.reset();
+      } else {
+        throw new Error('Email sending failed with status: ' + response.status);
+      }
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      displayToast('Gửi thất bại', 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau hoặc liên hệ trực tiếp qua số điện thoại.');
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <>
@@ -349,8 +437,188 @@ const HomePage = () => {
 
       {/* Q&A Section */}
       <QandA />
+
+      {/* Test Section */}
+      <section className="test-section" id="test">
+        <div className="test-container">
+          <div className="test-card">
+            {/* Decorative backgrounds */}
+            <div className="test-bg test-bg-1"></div>
+            <div className="test-bg test-bg-2"></div>
+            
+            {/* Content */}
+            <div className="test-content">
+              <h2 className="test-title">Dạ dày của bạn đang ở Level nào?</h2>
+              <p className="test-description">
+                Làm bài test 3 phút trước khi cơn đau pop-up lần nữa!
+              </p>
+              
+              <div className="test-benefits">
+                <h3 className="test-benefits-title">Bài test này sẽ giúp bạn:</h3>
+                <ul className="test-list">
+                  <li className="test-item">
+                    <div className="test-icon">
+                      <span className="material-symbols-outlined">check</span>
+                    </div>
+                    <p className="test-text">Đánh giá mức độ nghiêm trọng của các triệu chứng dạ dày</p>
+                  </li>
+                  <li className="test-item">
+                    <div className="test-icon">
+                      <span className="material-symbols-outlined">check</span>
+                    </div>
+                    <p className="test-text">Nhận biết các yếu tố nguy cơ từ lối sống</p>
+                  </li>
+                  <li className="test-item">
+                    <div className="test-icon">
+                      <span className="material-symbols-outlined">check</span>
+                    </div>
+                    <p className="test-text">Nhận lời khuyên cụ thể để cải thiện sức khỏe</p>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="test-actions">
+                <Link to="/test-start" state={{ autoStart: true }} className="btn-test-start">
+                  <span className="material-symbols-outlined">play_arrow</span>
+                  Bắt đầu test ngay
+                </Link>
+                
+                <p className="test-disclaimer">
+                  *Kết quả chỉ mang tính chất tham khảo. Vui lòng tham khảo ý kiến bác sĩ để được chẩn đoán và điều trị chính xác.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="contact-section" id="contact">
+        <div className="section-container">
+          <div className="section-header">
+            <h2 className="section-title">Liên hệ</h2>
+            <p className="section-subtitle">
+              Nếu bạn muốn hợp tác truyền thông, tài trợ, hoặc cần thêm thông tin về hoạt động, hãy để lại lời nhắn.
+            </p>
+          </div>
+          
+          <div className="contact-grid">
+            <div className="contact-info-card">
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">call</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Phone / Zalo</h3>
+                  <p className="contact-info-text">0815398633</p>
+                </div>
+              </div>
+
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">mail</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Email dự án</h3>
+                  <p className="contact-info-text">prismproject.fptu@gmail.com</p>
+                </div>
+              </div>
+
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">alternate_email</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Email trưởng BTC</h3>
+                  <p className="contact-info-text">hanhndmss180820@fpt.edu.vn</p>
+                  <p className="contact-info-subtitle">Ms. Nguyễn Đặng Mỹ Hạnh</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="contact-form-card">
+              <form className="contact-form" onSubmit={handleContactSubmit}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="full-name">Họ và tên</label>
+                    <input 
+                      className="form-input" 
+                      id="full-name" 
+                      name="full-name" 
+                      type="text"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="email">Email</label>
+                    <input 
+                      className="form-input" 
+                      id="email" 
+                      name="email" 
+                      type="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                    <input 
+                      className="form-input" 
+                      id="phone" 
+                      name="phone" 
+                      type="tel"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="subject">Bạn muốn liên hệ về</label>
+                    <div className="select-wrapper">
+                      <select 
+                        className="form-select" 
+                        id="subject" 
+                        name="subject"
+                        required
+                      >
+                        <option value="">Chọn...</option>
+                        <option value="Hợp tác chuyên môn">Hợp tác chuyên môn</option>
+                        <option value="Tài trợ">Tài trợ</option>
+                        <option value="Truyền thông">Truyền thông</option>
+                        <option value="Khác">Khác</option>
+                      </select>
+                      <span className="material-symbols-outlined select-arrow">expand_more</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="message">Nội dung</label>
+                  <textarea 
+                    className="form-textarea" 
+                    id="message" 
+                    name="message" 
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                <button className="btn-submit" type="submit" disabled={isSending}>
+                  <span className="material-symbols-outlined">send</span>
+                  {isSending ? 'Đang gửi...' : 'Gửi liên hệ'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
       <Footer />
+      <Toast 
+        show={showToast} 
+        title={toastTitle} 
+        message={toastMessage} 
+        onClose={() => setShowToast(false)}
+      />
     </>
   );
 };
