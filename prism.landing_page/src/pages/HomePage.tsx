@@ -29,7 +29,8 @@ const HomePage = () => {
     const sectionMap: Record<string, string> = {
       '/aboutus': 'about',
       '/qa': 'qa',
-      '/test': 'test'
+      '/test': 'test',
+      '/contact': 'contact'
     };
 
     const sectionId = sectionMap[location.pathname];
@@ -86,6 +87,9 @@ const HomePage = () => {
           } else if (entry.target.id === 'test' && location.pathname !== '/test') {
             isNavigatingFromScrollSpy.current = true;
             navigate('/test', { replace: true });
+          } else if (entry.target.id === 'contact' && location.pathname !== '/contact') {
+            isNavigatingFromScrollSpy.current = true;
+            navigate('/contact', { replace: true });
           }
         }
       });
@@ -97,6 +101,7 @@ const HomePage = () => {
     const aboutSection = document.getElementById('about');
     const qaSection = document.getElementById('qa');
     const testSection = document.getElementById('test');
+    const contactSection = document.getElementById('contact');
     
     if (aboutSection) {
       observer.observe(aboutSection);
@@ -106,6 +111,9 @@ const HomePage = () => {
     }
     if (testSection) {
       observer.observe(testSection);
+    }
+    if (contactSection) {
+      observer.observe(contactSection);
     }
 
     // Handler for scrolling back to top
@@ -407,6 +415,126 @@ const HomePage = () => {
                   *Kết quả chỉ mang tính chất tham khảo. Vui lòng tham khảo ý kiến bác sĩ để được chẩn đoán và điều trị chính xác.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="contact-section" id="contact">
+        <div className="section-container">
+          <div className="section-header">
+            <h2 className="section-title">Liên hệ</h2>
+            <p className="section-subtitle">
+              Nếu bạn muốn hợp tác truyền thông, tài trợ, hoặc cần thêm thông tin về hoạt động, hãy để lại lời nhắn.
+            </p>
+          </div>
+          
+          <div className="contact-grid">
+            <div className="contact-info-card">
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">call</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Phone / Zalo</h3>
+                  <p className="contact-info-text">0815398633</p>
+                </div>
+              </div>
+
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">mail</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Email dự án</h3>
+                  <p className="contact-info-text">prismproject.fptu@gmail.com</p>
+                </div>
+              </div>
+
+              <div className="contact-info-item">
+                <div className="contact-info-icon">
+                  <span className="material-symbols-outlined">alternate_email</span>
+                </div>
+                <div>
+                  <h3 className="contact-info-title">Email trưởng BTC</h3>
+                  <p className="contact-info-text">hanhndmss180820@fpt.edu.vn</p>
+                  <p className="contact-info-subtitle">Ms. Nguyễn Đặng Mỹ Hạnh</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="contact-form-card">
+              <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="full-name">Họ và tên</label>
+                    <input 
+                      className="form-input" 
+                      id="full-name" 
+                      name="full-name" 
+                      type="text"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="email">Email</label>
+                    <input 
+                      className="form-input" 
+                      id="email" 
+                      name="email" 
+                      type="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                    <input 
+                      className="form-input" 
+                      id="phone" 
+                      name="phone" 
+                      type="tel"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="subject">Bạn muốn liên hệ về</label>
+                    <div className="select-wrapper">
+                      <select 
+                        className="form-select" 
+                        id="subject" 
+                        name="subject"
+                        required
+                      >
+                        <option value="">Chọn...</option>
+                        <option value="partnership">Hợp tác chuyên môn</option>
+                        <option value="sponsorship">Tài trợ</option>
+                        <option value="media">Truyền thông</option>
+                        <option value="other">Khác</option>
+                      </select>
+                      <span className="material-symbols-outlined select-arrow">expand_more</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="message">Nội dung</label>
+                  <textarea 
+                    className="form-textarea" 
+                    id="message" 
+                    name="message" 
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                <button className="btn-submit" type="submit">
+                  <span className="material-symbols-outlined">send</span>
+                  Gửi liên hệ
+                </button>
+              </form>
             </div>
           </div>
         </div>
