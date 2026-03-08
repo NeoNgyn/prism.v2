@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import QandA from './QandA';
+import { Toast } from '../components/Toast';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -10,6 +12,19 @@ const HomePage = () => {
   const navigate = useNavigate();
   const isScrollingProgrammatically = useRef(false);
   const isNavigatingFromScrollSpy = useRef(false);
+  
+  // Toast state
+  const [showToast, setShowToast] = useState(false);
+  const [toastTitle, setToastTitle] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  // Toast helper function
+  const displayToast = (title: string, message: string) => {
+    setToastTitle(title);
+    setToastMessage(message);
+    setShowToast(true);
+  };
 
   // Listen for header nav clicks (when clicking same page link)
   useEffect(() => {
@@ -138,6 +153,63 @@ const HomePage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [location.pathname, navigate]);
+
+  // Handle contact form submission with EmailJS
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const form = e.currentTarget;
+    
+    // Kiểm tra cấu hình EmailJS
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      displayToast('Lỗi cấu hình', 'Vui lòng cấu hình EmailJS trong file .env. Xem hướng dẫn trong EMAILJS_SETUP.md');
+      return;
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // Validate form
+    if (!data['full-name'] || !data.email || !data.message) {
+      displayToast('Thiếu thông tin', 'Vui lòng điền đầy đủ họ tên, email và nội dung.');
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      const templateParams = {
+        from_name: data['full-name'],
+        reply_to: data.email,
+        phone: data.phone || 'Không cung cấp',
+        topic: data.subject || 'Khác',
+        message: data.message,
+      };
+
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
+      if (response.status === 200 || response.text === 'OK') {
+        displayToast('Gửi thành công!', 'Email của bạn đã được gửi. Chúng tôi sẽ phản hồi trong 24-48h.');
+        form.reset();
+      } else {
+        throw new Error('Email sending failed with status: ' + response.status);
+      }
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      displayToast('Gửi thất bại', 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau hoặc liên hệ trực tiếp qua số điện thoại.');
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <>
@@ -465,7 +537,7 @@ const HomePage = () => {
             </div>
 
             <div className="contact-form-card">
-              <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
+              <form className="contact-form" onSubmit={handleContactSubmit}>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label" htmlFor="full-name">Họ và tên</label>
@@ -530,9 +602,9 @@ const HomePage = () => {
                   />
                 </div>
 
-                <button className="btn-submit" type="submit">
+                <button className="btn-submit" type="submit" disabled={isSending}>
                   <span className="material-symbols-outlined">send</span>
-                  Gửi liên hệ
+                  {isSending ? 'Đang gửi...' : 'Gửi liên hệ'}
                 </button>
               </form>
             </div>
@@ -541,6 +613,12 @@ const HomePage = () => {
       </section>
     </main>
       <Footer />
+      <Toast 
+        show={showToast} 
+        title={toastTitle} 
+        message={toastMessage} 
+        onClose={() => setShowToast(false)}
+      />
     </>
   );
 };
