@@ -398,10 +398,10 @@ const HomePage = () => {
               </div>
 
               <div className="test-actions">
-                <button className="btn-test-start">
+                <Link to="/test-start" state={{ autoStart: true }} className="btn-test-start">
                   <span className="material-symbols-outlined">play_arrow</span>
                   Bắt đầu test ngay
-                </button>
+                </Link>
                 
                 <p className="test-disclaimer">
                   *Kết quả chỉ mang tính chất tham khảo. Vui lòng tham khảo ý kiến bác sĩ để được chẩn đoán và điều trị chính xác.
