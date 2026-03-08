@@ -1,50 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './QandA.css';
 
-interface FlipCardProps {
+interface QuestionCardProps {
   question: string;
-  answer: string;
-  source: string;
-  sourceLink: string;
-  relatedQuestions: string[];
+  index: number;
+  mascotVariant: number;
 }
 
-const FlipCard = ({ question, answer, source, sourceLink, relatedQuestions }: FlipCardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
+const QuestionCard = ({ question, index, mascotVariant }: QuestionCardProps) => {
+  // Mascot emojis and styles for each variant (until images are added)
+  const mascotStyles = [
+    { emoji: '🤔', rotation: 5 },
+    { emoji: '😊', rotation: -5 },
+    { emoji: '💭', rotation: 3 },
+    { emoji: '😣', rotation: -3 }
+  ];
+  
+  const mascot = mascotStyles[mascotVariant];
+  
   return (
-    <div 
-      className={`qa-flip-card ${isFlipped ? 'flipped' : ''}`}
-      onClick={() => setIsFlipped(!isFlipped)}
-    >
-      <div className="qa-flip-card-inner">
-        {/* Front Side */}
-        <div className="qa-flip-card-front">
-          <h3 className="qa-question-title">
-            {question}
-          </h3>
-          <span className="material-symbols-outlined qa-icon">autorenew</span>
-          <p className="qa-hint-text">Nhấn để xem câu trả lời</p>
-        </div>
-        
-        {/* Back Side */}
-        <div className="qa-flip-card-back">
-          <h4 className="qa-answer-label">Câu trả lời:</h4>
-          <p className="qa-answer-text">
-            {answer}
-          </p>
-          <div className="qa-card-footer">
-            <p className="qa-footer-label">Nguồn tham khảo:</p>
-            <a className="qa-source-link" href={sourceLink} target="_blank" rel="noopener noreferrer">
-              {source}
-            </a>
-            <p className="qa-footer-label">Câu hỏi liên quan:</p>
-            <ul className="qa-related-questions">
-              {relatedQuestions.map((q, index) => (
-                <li key={index}>{q}</li>
-              ))}
-            </ul>
-          </div>
+    <div className="qa-question-card">
+      <div className="qa-card-header">
+        <div className="qa-card-number">{String(index + 1).padStart(2, '0')}</div>
+      </div>
+      <h3 className="qa-card-question">{question}</h3>
+      <div className="qa-card-mascot">
+        <div 
+          className="qa-mascot-placeholder" 
+          style={{ transform: `rotate(${mascot.rotation}deg)` }}
+        >
+          <span className="qa-mascot-emoji">{mascot.emoji}</span>
         </div>
       </div>
     </div>
@@ -52,68 +37,67 @@ const FlipCard = ({ question, answer, source, sourceLink, relatedQuestions }: Fl
 };
 
 const QandA = () => {
-  const qaData = [
-    {
-      question: "ĐAU DẠ DÀY HAY TRÀO NGƯỢC KHÁC NHAU THẾ NÀO?",
-      answer: "Đau dạ dày thường tập trung ở vùng thượng vị, cảm giác âm ỉ hoặc quặn thắt. Trào ngược (GERD) thường đi kèm cảm giác nóng rát lan từ dạ dày lên thực quản, ợ chua và khó nuốt.",
-      source: "Thư viện Y khoa Quốc gia",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Triệu chứng ợ hơi kéo dài?",
-        "Khi nào cần đi nội soi?"
-      ]
-    },
-    {
-      question: "GERD PHỔ BIẾN TỚI MỨC NÀO Ở VIỆT NAM?",
-      answer: "Ước tính khoảng 10-15% dân số Việt Nam gặp các vấn đề về trào ngược dạ dày thực quản do thói quen ăn uống nhanh, nhiều dầu mỡ và stress công việc cao.",
-      source: "Báo Sức Khỏe & Đời Sống",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Chế độ ăn cho người GERD?",
-        "Stress ảnh hưởng dạ dày sao?"
-      ]
-    },
-    {
-      question: "ĐAU THƯỢNG VỊ, ĐẦY BỤNG CÓ PHẢI \"BỆNH DẠ DÀY\"?",
-      answer: "Đúng, đây là những dấu hiệu điển hình của viêm loét dạ dày hoặc khó tiêu chức năng. Tuy nhiên, cũng có thể do túi mật hoặc tụy, cần thăm khám bác sĩ chuyên khoa.",
-      source: "Cổng thông tin Vinmec",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Phân biệt đau dạ dày & gan?",
-        "Cách giảm đau nhanh tại nhà?"
-      ]
-    },
-    {
-      question: "KHI NÀO CẦN ĐI KHÁM NGAY, KHÔNG NÊN TỰ CHỊU?",
-      answer: "Đi khám ngay nếu: Nôn ra máu hoặc đi ngoài phân đen, sụt cân không rõ nguyên nhân, nuốt nghẹn, hoặc đau bụng dữ dội không thuyên giảm sau khi nghỉ ngơi.",
-      source: "Nhà thuốc Long Châu",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Xuất huyết dạ dày có nguy hiểm?",
-        "Tầm soát ung thư dạ dày?"
-      ]
-    },
-    {
-      question: "TRÀO NGƯỢC DẠ DÀY NÊN KIÊNG GÌ ĐỂ CẢI THIỆN?",
-      answer: "Hạn chế thực phẩm cay nóng, chua, cà phê, rượu bia, chocolate và các loại đồ uống có gas. Không nên nằm ngay sau khi ăn ít nhất 2-3 tiếng.",
-      source: "BV Đại học Y Dược TP.HCM",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Tư thế nằm ngủ cho người trào ngược?",
-        "Mẹo dân gian chữa dạ dày?"
-      ]
-    },
-    {
-      question: "STRESS CÓ THỂ LÀM NẶNG VẤN ĐỀ DẠ DÀY KHÔNG?",
-      answer: "Chắc chắn có. Stress kích thích hệ thần kinh giao cảm làm tăng tiết acid dạ dày và làm chậm quá trình tiêu hóa, dễ dẫn đến viêm loét và hội chứng ruột kích thích.",
-      source: "Healthline",
-      sourceLink: "#",
-      relatedQuestions: [
-        "Kỹ thuật thở giảm đau dạ dày?",
-        "Mối liên hệ não - ruột?"
-      ]
-    }
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const autoPlayRef = useRef<number | null>(null);
+
+  const questions = [
+    "Đau dạ dày hay trào ngược khác nhau thế nào?",
+    "GERD phổ biến tới mức nào ở Việt Nam?",
+    "Đau thượng vị, đầy bụng, ợ hơi có phải \"đau dạ dày\" không?",
+    "Khi nào cần đi khám ngay, không nên tự chịu?",
+    "Trào ngược dạ dày nên kiêng gì để cải thiện triệu chứng?",
+    "Stress có thể làm nặng vấn đề dạ dày không?",
+    "Vi khuẩn HP lây qua đường nào?",
+    "Khi nào nên nội soi dạ dày?",
+    "Tự uống thuốc giảm đau có thể làm hại dạ dày không?",
+    "Buồn nôn, nôn ra máu, đi ngoài phân đen có nguy hiểm không?"
   ];
+
+  // Get mascot variant for each question (rotate through 4 variants)
+  const getMascotVariant = (questionIndex: number) => {
+    return questionIndex % 4;
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? questions.length - 1 : prev - 1));
+    resetAutoPlay();
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
+    resetAutoPlay();
+  };
+
+  const resetAutoPlay = () => {
+    if (autoPlayRef.current) {
+      clearInterval(autoPlayRef.current);
+    }
+    if (isAutoPlaying) {
+      autoPlayRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
+      }, 3500);
+    }
+  };
+
+  // Auto-play effect
+  useEffect(() => {
+    if (isAutoPlaying) {
+      autoPlayRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev === questions.length - 1 ? 0 : prev + 1));
+      }, 3500); // Change slide every 3.5 seconds
+    }
+
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+      }
+    };
+  }, [isAutoPlaying, questions.length]);
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying);
+  };
 
   return (
     <section className="qa-section" id="qa">
@@ -123,16 +107,85 @@ const QandA = () => {
           CÂU HỎI THƯỜNG GẶP
         </h1>
         <p className="qa-main-subtitle">
-          Tìm hiểu thêm về sức khỏe dạ dày qua các câu hỏi phổ biến từ chiến dịch Êm Dạ Mode.
+          Khám phá các câu hỏi phổ biến về sức khỏe dạ dày từ chiến dịch Êm Dạ Mode.
         </p>
       </header>
 
-      {/* Q&A Cards Grid */}
-      <div className="qa-container">
-        <div className="qa-grid">
-          {qaData.map((qa, index) => (
-            <FlipCard key={index} {...qa} />
-          ))}
+      {/* Slider Container */}
+      <div className="qa-slider-container">
+        <div className="qa-slider-wrapper">
+          {/* Previous Button */}
+          <button 
+            className="qa-slider-button qa-slider-button-prev" 
+            onClick={handlePrevious}
+            aria-label="Previous question"
+          >
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
+
+          {/* Cards Slider - Show 4 cards */}
+          <div className="qa-slider-track">
+            <div 
+              className="qa-slider-content"
+              style={{
+                transform: `translateX(-${(currentIndex * 100) / 4}%)`
+              }}
+            >
+              {/* Duplicate questions for infinite scroll effect */}
+              {[...questions, ...questions].map((question, index) => (
+                <div key={index} className="qa-slider-item">
+                  <QuestionCard 
+                    question={question} 
+                    index={index % questions.length}
+                    mascotVariant={getMascotVariant(index % questions.length)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Next Button */}
+          <button 
+            className="qa-slider-button qa-slider-button-next" 
+            onClick={handleNext}
+            aria-label="Next question"
+          >
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+
+        {/* Controls */}
+        <div className="qa-slider-controls">
+          {/* Auto-play toggle */}
+          <button 
+            className={`qa-autoplay-button ${isAutoPlaying ? 'playing' : 'paused'}`}
+            onClick={toggleAutoPlay}
+            aria-label={isAutoPlaying ? 'Pause auto-play' : 'Start auto-play'}
+          >
+            <span className="material-symbols-outlined">
+              {isAutoPlaying ? 'pause' : 'play_arrow'}
+            </span>
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="qa-slider-dots">
+            {questions.map((_, index) => (
+              <button
+                key={index}
+                className={`qa-slider-dot ${index === currentIndex ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  resetAutoPlay();
+                }}
+                aria-label={`Go to question ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Counter */}
+          <div className="qa-slider-counter">
+            {String(currentIndex + 1).padStart(2, '0')} / {String(questions.length).padStart(2, '0')}
+          </div>
         </div>
       </div>
 
