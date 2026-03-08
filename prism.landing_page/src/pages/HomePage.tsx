@@ -581,10 +581,10 @@ const HomePage = () => {
                         required
                       >
                         <option value="">Chọn...</option>
-                        <option value="partnership">Hợp tác chuyên môn</option>
-                        <option value="sponsorship">Tài trợ</option>
-                        <option value="media">Truyền thông</option>
-                        <option value="other">Khác</option>
+                        <option value="Hợp tác chuyên môn">Hợp tác chuyên môn</option>
+                        <option value="Tài trợ">Tài trợ</option>
+                        <option value="Truyền thông">Truyền thông</option>
+                        <option value="Khác">Khác</option>
                       </select>
                       <span className="material-symbols-outlined select-arrow">expand_more</span>
                     </div>
