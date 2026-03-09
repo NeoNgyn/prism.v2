@@ -1,11 +1,11 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './AboutUs.css';
-import myHanhImg from '../../images/Team/MyHanh.jpeg';
-import anhHaoImg from '../../images/Team/AnhHao.jpg';
-import maiThaoImg from '../../images/Team/MaiThao.jpg';
-import thanhThaoImg from '../../images/Team/ThanhThao.jpg';
-import traMyImg from '../../images/Team/TraMy.jpg';
+import myHanhImg from '../assets/Images/MyHanh.jpeg';
+import anhHaoImg from '../assets/Images/AnhHao.jpg';
+import maiThaoImg from '../assets/Images/MaiThao.jpg';
+import thanhThaoImg from '../assets/Images/ThanhThao.jpg';
+import traMyImg from '../assets/Images/TraMy.jpg';
 
 const AboutUs = () => {
   return (
