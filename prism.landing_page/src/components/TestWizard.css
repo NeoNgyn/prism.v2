@@ -15,7 +15,7 @@
 
 .test-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff6b35, #f7931e);
+  background: linear-gradient(90deg, #48d1cc, #00cc99);
   transition: width 0.3s ease;
 }
 
@@ -31,7 +31,7 @@
 
 .test-question-number {
   font-weight: 700;
-  color: #ff6b35;
+  color: #4ea08d;
 }
 
 .test-separator {
@@ -44,8 +44,8 @@
 
 /* Score Meter */
 .test-score-meter {
-  background: rgba(255, 107, 53, 0.05);
-  border: 1px solid rgba(255, 107, 53, 0.1);
+  background: rgba(72, 209, 204, 0.08);
+  border: 1px solid rgba(78, 160, 141, 0.18);
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 24px;
@@ -78,7 +78,7 @@
 
 .test-score-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  background: linear-gradient(90deg, #48d1cc, #00cc99, #ef4444);
   transition: width 0.4s ease;
 }
 
@@ -127,12 +127,12 @@
 
 .test-option:hover {
   background: #fff;
-  border-color: #ff6b35;
+  border-color: #4ea08d;
 }
 
 .test-option.selected {
-  background: #fff5f0;
-  border-color: #ff6b35;
+  background: #ecfbf7;
+  border-color: #4ea08d;
 }
 
 .test-option input[type="radio"] {
@@ -140,7 +140,7 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #ff6b35;
+  accent-color: #4ea08d;
 }
 
 .test-option-label {
@@ -185,14 +185,14 @@
 }
 
 .test-btn-next {
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: linear-gradient(135deg, #48d1cc 0%, #00cc99 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 204, 153, 0.3);
 }
 
 .test-btn-next:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 204, 153, 0.4);
 }
 
 .test-btn-next:active {

@@ -121,7 +121,7 @@ const Test = () => {
                 <TestWizard items={testItems} onComplete={handleComplete} />
               </>
             ) : (
-              <div className="test-result-container">
+              <div className={`test-result-container test-result-container-${result.cls}`}>
                 <div className="test-result-header">
                   <h1 className="test-result-title">KẾT QUẢ ĐÁNH GIÁ</h1>
                 </div>
