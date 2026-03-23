@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { TestWizard } from '../components/TestWizard';
+import { Toast } from '../components/Toast';
 import { testItems } from '../data/testData';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import type { TestResult } from '../types';
@@ -38,6 +39,8 @@ const Test = () => {
   const [formError, setFormError] = useState('');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   const [saveErrorMessage, setSaveErrorMessage] = useState('');
+  const [showSaveSuccessToast, setShowSaveSuccessToast] = useState(false);
+  const [showSaveErrorToast, setShowSaveErrorToast] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: '',
     age: '',
@@ -101,10 +104,13 @@ const Test = () => {
     setResult(testResult);
     setSaveStatus('saving');
     setSaveErrorMessage('');
+    setShowSaveSuccessToast(false);
+    setShowSaveErrorToast(false);
 
     if (!isSupabaseConfigured || !supabase) {
       setSaveStatus('error');
       setSaveErrorMessage('Chưa cấu hình Supabase. Vui lòng thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY.');
+      setShowSaveErrorToast(true);
       return;
     }
 
@@ -115,15 +121,39 @@ const Test = () => {
           .insert(payload);
 
         if (error) {
+          const detailedMessage = [error.message, error.details, error.hint]
+            .filter(Boolean)
+            .join(' | ');
+
+          console.error('Supabase insert error (test_submissions):', {
+            code: error.code,
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            payload,
+          });
+
           setSaveStatus('error');
-          setSaveErrorMessage('Không thể lưu kết quả lúc này. Vui lòng kiểm tra cấu hình Supabase/RLS.');
+          setSaveErrorMessage(
+            detailedMessage
+              ? `Không thể lưu kết quả: ${detailedMessage}`
+              : 'Không thể lưu kết quả lúc này. Vui lòng kiểm tra cấu hình Supabase/RLS.'
+          );
+          setShowSaveErrorToast(true);
           return;
         }
 
         setSaveStatus('success');
+        setShowSaveSuccessToast(true);
       } catch {
+        const configuredUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
         setSaveStatus('error');
-        setSaveErrorMessage('Không thể kết nối Supabase để lưu kết quả.');
+        setSaveErrorMessage(
+          configuredUrl
+            ? `Không thể kết nối Supabase. Kiểm tra lại VITE_SUPABASE_URL: ${configuredUrl}`
+            : 'Không thể kết nối Supabase để lưu kết quả.'
+        );
+        setShowSaveErrorToast(true);
       }
     })();
   };
@@ -134,6 +164,8 @@ const Test = () => {
     setStarted(false);
     setSaveStatus('idle');
     setSaveErrorMessage('');
+    setShowSaveSuccessToast(false);
+    setShowSaveErrorToast(false);
   };
 
   // Intro Screen
@@ -278,6 +310,19 @@ const Test = () => {
               </>
             ) : (
               <div className={`test-result-container test-result-container-${result.cls}`}>
+                <Toast
+                  show={showSaveSuccessToast}
+                  title="Đã lưu kết quả"
+                  message="Kết quả của bạn đã được lưu thành công."
+                  onClose={() => setShowSaveSuccessToast(false)}
+                />
+                <Toast
+                  show={showSaveErrorToast}
+                  title="Lưu kết quả thất bại"
+                  message={saveErrorMessage}
+                  onClose={() => setShowSaveErrorToast(false)}
+                />
+
                 <div className="test-result-header">
                   <h1 className="test-result-title">KẾT QUẢ ĐÁNH GIÁ</h1>
                 </div>
@@ -320,16 +365,6 @@ const Test = () => {
                   <div className="test-result-save-status" role="status" aria-live="polite">
                     {saveStatus === 'saving' && (
                       <p className="test-result-save-status-text">Đang lưu kết quả của bạn...</p>
-                    )}
-                    {saveStatus === 'success' && (
-                      <p className="test-result-save-status-text test-result-save-status-success">
-                        Đã lưu kết quả thành công.
-                      </p>
-                    )}
-                    {saveStatus === 'error' && (
-                      <p className="test-result-save-status-text test-result-save-status-error">
-                        {saveErrorMessage}
-                      </p>
                     )}
                   </div>
 

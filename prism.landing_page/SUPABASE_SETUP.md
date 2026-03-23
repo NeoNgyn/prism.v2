@@ -20,9 +20,15 @@ create table if not exists public.test_submissions (
 
 alter table public.test_submissions enable row level security;
 
+grant usage on schema public to anon, authenticated;
+grant insert on table public.test_submissions to anon, authenticated;
+
+drop policy if exists "allow_anonymous_insert_test_submissions" on public.test_submissions;
+
 create policy "allow_anonymous_insert_test_submissions"
 on public.test_submissions
 for insert
+to anon, authenticated
 with check (true);
 ```
 
@@ -63,6 +69,30 @@ Chọn các môi trường cần áp dụng (`Production`, `Preview`, `Developme
    - `Đang lưu kết quả của bạn...`
    - `Đã lưu kết quả thành công.`
 4. Vào Supabase → **Table Editor** → `test_submissions` để thấy dữ liệu mới.
+
+## 6) Nếu vẫn không lưu được
+
+Trang `Test` hiện sẽ hiển thị chi tiết lỗi Supabase ngay bên dưới nút `Làm lại`.
+
+Các lỗi thường gặp:
+- `new row violates row-level security policy`: chưa tạo đúng policy hoặc policy chưa áp dụng cho `anon`.
+- `permission denied for table test_submissions`: thiếu `grant insert` cho `anon`/`authenticated`.
+- `violates check constraint`: cấu trúc bảng cũ khác schema hiện tại (ví dụ `result_class`).
+- `net::ERR_NAME_NOT_RESOLVED`: `VITE_SUPABASE_URL` sai Project URL (domain không tồn tại).
+
+Với lỗi `ERR_NAME_NOT_RESOLVED`, kiểm tra nhanh:
+1. Vào **Project Settings** → **API** → copy lại đúng `Project URL`.
+2. Đảm bảo URL có dạng `https://<project-ref>.supabase.co` (không phải `.com`, không thiếu/ký tự dư).
+3. Dán lại vào `.env`, rồi **tắt và chạy lại** `npm run dev`.
+
+Nếu bảng đã tạo từ trước, nên kiểm tra lại schema bằng SQL sau:
+
+```sql
+select column_name, data_type
+from information_schema.columns
+where table_schema = 'public' and table_name = 'test_submissions'
+order by ordinal_position;
+```
 
 ## Dữ liệu đang được lưu
 
