@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { TestWizard } from '../components/TestWizard';
 import { testItems } from '../data/testData';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import type { TestResult } from '../types';
 import './Test.css';
 
@@ -16,9 +17,9 @@ const getToneByScore = (score: number): ThemeTone => {
 };
 
 const trackGaEvent = (eventName: string, params: Record<string, string | number | boolean>) => {
-  const gtag = (window as Window & {
+  const { gtag } = window as Window & {
     gtag?: (command: 'event', name: string, parameters?: Record<string, unknown>) => void;
-  }).gtag;
+  };
 
   if (!gtag) return;
 
@@ -35,6 +36,8 @@ const Test = () => {
   const [result, setResult] = useState<TestResult | null>(null);
   const [liveScore, setLiveScore] = useState(0);
   const [formError, setFormError] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+  const [saveErrorMessage, setSaveErrorMessage] = useState('');
   const [userInfo, setUserInfo] = useState({
     name: '',
     age: '',
@@ -86,13 +89,51 @@ const Test = () => {
   };
 
   const handleComplete = (testResult: TestResult) => {
+    const payload = {
+      name: trimmedName,
+      age: ageValue,
+      email: trimmedEmail,
+      score: testResult.score,
+      result_class: testResult.cls,
+      result_title: testResult.resultTitle,
+    };
+
     setResult(testResult);
+    setSaveStatus('saving');
+    setSaveErrorMessage('');
+
+    if (!isSupabaseConfigured || !supabase) {
+      setSaveStatus('error');
+      setSaveErrorMessage('Chưa cấu hình Supabase. Vui lòng thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY.');
+      return;
+    }
+
+    void (async () => {
+      try {
+        const { error } = await supabase
+          .from('test_submissions')
+          .insert(payload);
+
+        if (error) {
+          setSaveStatus('error');
+          setSaveErrorMessage('Không thể lưu kết quả lúc này. Vui lòng kiểm tra cấu hình Supabase/RLS.');
+          return;
+        }
+
+        setSaveStatus('success');
+      } catch {
+        setSaveStatus('error');
+        setSaveErrorMessage('Không thể kết nối Supabase để lưu kết quả.');
+      }
+    })();
   };
 
   const handleRestart = () => {
     setResult(null);
     setLiveScore(0);
     setStarted(false);
+    setSaveStatus('idle');
+    setSaveErrorMessage('');
   };
 
   // Intro Screen
@@ -274,6 +315,22 @@ const Test = () => {
                       <span className="material-symbols-outlined">refresh</span>
                       Làm lại
                     </button>
+                  </div>
+
+                  <div className="test-result-save-status" role="status" aria-live="polite">
+                    {saveStatus === 'saving' && (
+                      <p className="test-result-save-status-text">Đang lưu kết quả của bạn...</p>
+                    )}
+                    {saveStatus === 'success' && (
+                      <p className="test-result-save-status-text test-result-save-status-success">
+                        Đã lưu kết quả thành công.
+                      </p>
+                    )}
+                    {saveStatus === 'error' && (
+                      <p className="test-result-save-status-text test-result-save-status-error">
+                        {saveErrorMessage}
+                      </p>
+                    )}
                   </div>
 
                   <div className="test-result-disclaimer">

@@ -157,6 +157,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+.test-result-save-status {
+  margin-top: 14px;
+}
+
+.test-result-save-status-text {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.test-result-save-status-success {
+  color: #047857;
+  font-weight: 600;
+}
+
+.test-result-save-status-error {
+  color: #b91c1c;
+  font-weight: 500;
+}
   gap: 20px;
 }
 
